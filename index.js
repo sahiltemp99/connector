@@ -14,7 +14,7 @@ app.use(express.json());
 
 app.use('/', Route);
 
-const PORT = process.env.PORT || 4001;
+const PORT = process.env.PORT || 4002;
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
