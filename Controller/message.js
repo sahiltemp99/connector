@@ -3,7 +3,6 @@ const { default: axios } = require('axios');
 const sendMessageToCognigy = async (message) => {
     try {
         console.log({ message })
-        console.log(process.env.API_URL)
         const { data } = await axios.post(process.env.API_URL, {
             userId: "user_id",
             sessionId: "89652222551452",
