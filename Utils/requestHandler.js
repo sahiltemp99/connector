@@ -1,8 +1,4 @@
 class RequestHandler {
-  // constructor() {
-  //     const logger = new Logger();
-  //     this.logger = logger;
-  // }
 
   sendSuccess(res, message, data = null, status = 200) {
     return res.status(status).json({
