@@ -5,7 +5,8 @@ const requestHandler = new RequestHandler();
 const sendMessageToCognigy = async (message) => {
     try {
         console.log({ message })
-        const { data } = await axios.post('https://endpoint-trial.cognigy.ai/e3600a7b08e2d731c1068760cb787796a2d0795b6c73ea8d3b48162cd3fc8749', {
+        console.log(process.env.API_URL)
+        const { data } = await axios.post(process.env.API_URL, {
             userId: "user_id",
             sessionId: "89652222551452",
             text: message,
