@@ -1,6 +1,4 @@
 const { default: axios } = require('axios');
-const RequestHandler = require('../utils/requestHandler');
-const requestHandler = new RequestHandler();
 
 const sendMessageToCognigy = async (message) => {
     try {
@@ -27,26 +25,25 @@ const sendMessageToCognigy = async (message) => {
 const sendAndReceiveMessage = async (req, res) => {
     try {
         if (!req.body.message) {
-            return requestHandler.sendErrorMsg(
-                res,
-                'Please provide valid message.',
-                400,
-            );
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide valid message.',
+                data: null,
+            });
         }
         const reply = await sendMessageToCognigy(req.body.message)
-        return requestHandler.sendSuccess(
-            res,
-            'Reply',
-            reply?.text,
-            200,
-        );
+        return res.status(200).json({
+            success: false,
+            message: 'Reply',
+            data: reply?.text,
+        });
     }
     catch (e) {
-        return requestHandler.sendErrorMsg(
-            res,
-            e.message,
-            500
-        );
+        return res.status(500).json({
+            success: false,
+            message: e.message,
+            data: null,
+        });
     }
 }
 
