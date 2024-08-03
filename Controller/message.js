@@ -35,7 +35,7 @@ const sendAndReceiveMessage = async (req, res) => {
         }
         const reply = await sendMessageToCognigy(req)
         return res.status(200).json({
-            success: false,
+            success: true,
             message: 'Reply',
             data: reply?.text,
         });
