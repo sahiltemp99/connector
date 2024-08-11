@@ -13,9 +13,52 @@ const sendMessageToCognigy = async (req) => {
             }
         })
         console.log("Message from chatbot")
-        console.log({ data })
+        if (data?.outputStack && data?.outputStack?.length > 0) {
+            // return data?.outputStack
+            if (data?.outputStack?.length > 1) {
+                let reply = {
+                    reply_type: "MULTIPLE_TEXT",
+                    data: data?.outputStack?.map(item => item.text),
+                    digital_human: data?.outputStack?.map(item => item.text)
+                }
+                console.log(reply)
+                return reply
+            }
+            else if (data?.outputStack[0]?.text !== null) {
+                let reply = {
+                    reply_type: "TEXT",
+                    data: data?.outputStack[0]?.text,
+                    digital_human: [data?.outputStack[0]?.data?.digitalhuman]
+                }
+                console.log(reply)
+                return reply
+            }
+            else if (data?.outputStack[0]?.data?.type === 'buttons') {
+                let reply = {
+                    reply_type: "BUTTONS",
+                    data: {
+                        buttons: data?.outputStack[0]?.data?._cognigy?._default?._buttons?.buttons?.map(button => button?.title)
+                    },
+                    digital_human: [data?.outputStack[0]?.data?._cognigy?._default?._buttons?.text]
+                }
+                // console.log(reply)
+                return reply
+            }
+            else if (data?.outputStack[0]?.data?.type === 'quickReplies') {
+                let reply = {
+                    reply_type: "QUICK_REPLIES",
+                    data: {
+                        buttons: data?.outputStack[0]?.data?._cognigy?._default?._quickReplies?.quickReplies?.map(quickReply => quickReply?.title)
+                    },
+                    digital_human: [data?.outputStack[0]?.data?._cognigy?._default?._quickReplies?.text]
+                }
+                // console.log(reply)
+                return reply
+            }
+        }
+
         console.log('\n' + '-'.repeat(50) + '\n');
-        return data
+        return data?.outputStack
     }
     catch (e) {
         return {
@@ -37,7 +80,7 @@ const sendAndReceiveMessage = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: 'Reply',
-            data: reply?.text,
+            data: reply,
         });
     }
     catch (e) {
